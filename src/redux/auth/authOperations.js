@@ -33,7 +33,6 @@ export const logIn = createAsyncThunk(
   'auth/login',
   async ({ email, password }, thunkAPI) => {
     try {
-      console.log('login')
       const response = await axios.post('users/login', { email, password });  
       if (response.status >= 400) {
         throw new Error ('Incorrect email or password')

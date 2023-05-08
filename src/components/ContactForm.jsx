@@ -4,8 +4,9 @@ import { toast } from 'react-toastify';
 import { Backdrop, Button, Box, Grid, TextField, Modal } from '@mui/material';
 import { addContact } from 'redux/contacts/contactsOperations';
 import { selectContacts } from 'redux/contacts/contactsSelectors';
-import titleCase from 'utilities/titleCase';
 import { INFO } from 'redux/constants';
+import titleCase from 'utilities/titleCase';
+import isNumeric from 'utilities/isNumeric'
 import AddContactButton from './AddContactButton';
 
 export default function ContactForm() {
@@ -36,13 +37,7 @@ export default function ContactForm() {
     setOpen(false);
     resetForm();
   };
-  function isNumeric(value, name) {
-    if ('number' === name) {
-      let check = /^-?\d+$/.test(value);
-      return check ? value : '';
-    }
-    return value;
-  }
+  
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setContact(prevState => ({ ...prevState, [name]: isNumeric(value, name) }));
