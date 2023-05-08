@@ -83,7 +83,7 @@ function ResponsiveAppBar() {
           </Box>
           {isLoggedIn && (
             <>
-              <UserMenu anchorElNav={anchorElNav} />
+              <UserMenu />
             </>
           )}
         </Toolbar>

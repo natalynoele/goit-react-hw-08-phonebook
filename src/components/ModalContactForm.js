@@ -6,7 +6,6 @@ export default function ModalContactForm({ isOpen, operation, handleSubmit }) {
     name: '',
     number: '',
   });
-  const [open, setOpen] = useState(false);
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -15,8 +14,7 @@ export default function ModalContactForm({ isOpen, operation, handleSubmit }) {
 
   const handleClose = event => {
     if (event.target.classList.contains('MuiModal-backdrop')) {
-      setOpen(false);
-    }
+     }
   };
   const { name, number } = contact;
   return (

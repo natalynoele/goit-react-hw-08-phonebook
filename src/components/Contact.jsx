@@ -31,7 +31,7 @@ export const Contact = ({ contact }) => {
     setEditedContact(prevState => ({ ...prevState, [name]: value }));
   };
   const handleSubmit = () => {
-    dispatch(editContact(id, {name, number}))
+    dispatch(editContact(editedContact));
     setOpen(false);
   }
     const handleClose = event => {

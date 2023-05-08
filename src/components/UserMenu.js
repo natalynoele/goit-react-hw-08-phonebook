@@ -13,17 +13,15 @@ import { selectUser } from 'redux/auth/authSelectors';
 
 const settings = ['Logout'];
 
-function UserMenu({ anchorElNav }) {
+function UserMenu() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const handleLogOutClick = () => {
     dispatch(logOut());   
   };
-  const [open, setOpen] = useState(Boolean(anchorElNav));
+  
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const handleCloseUserMenu = () => {
-    setOpen(false);
-  };
+ 
   const handleOpenUserMenu = event => {
     setAnchorElUser(event.currentTarget);
   };
@@ -64,10 +62,10 @@ function UserMenu({ anchorElNav }) {
           horizontal: 'right',
         }}
         open={Boolean(anchorElUser)}
-        onClose={handleCloseUserMenu}
+   
       >
         {settings.map(setting => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
+          <MenuItem key={setting}>
             <Typography textAlign="center" onClick={handleLogOutClick}>
               {setting}
             </Typography>
