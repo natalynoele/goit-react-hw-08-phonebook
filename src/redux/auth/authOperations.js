@@ -18,13 +18,11 @@ export const register = createAsyncThunk(
   'auth/register',
   async (credentials, thunkAPI) => {
     try {
-      const response = await axios.post('/users/signup', credentials);   
-      if (response.status === 400) {
-        throw new Error('Something went wrong. Please, try again')
-      }
+      const response = await axios.post('/users/signup', credentials);
+      setAuthHeader(response.data.token);   
       return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error) {      
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -33,14 +31,12 @@ export const logIn = createAsyncThunk(
   'auth/login',
   async ({ email, password }, thunkAPI) => {
     try {
-      const response = await axios.post('users/login', { email, password });  
-      if (response.status >= 400) {
-        throw new Error ('Incorrect email or password')
-      }
+      const response = await axios.post('users/login', { email, password });      
      setAuthHeader(response.data.token);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      console.log('errorauth :>> ', error);
+      return thunkAPI.rejectWithValue('Incorrect email or password');
     }
   }
 );
@@ -48,8 +44,7 @@ export const logIn = createAsyncThunk(
 export const logOut = createAsyncThunk('auth/logout', 
    async (_, thunkAPI) => {
      try {
-      console.log('loOut')
-      await axios.post('users/logout');      
+     await axios.post('users/logout');      
       clearAuthHeader();  
       return 
     } catch (error) {

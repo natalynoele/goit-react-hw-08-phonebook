@@ -1,15 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { logOut, logIn, register } from './authOperations';
+import { STATUS } from 'redux/constants';
 
 const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
   error: null,
+  isLoading: false
 };
 
-const handleUserRejected = (state, { payload}) => {
-    state.error = payload;
+const actions = [register, logIn];
+const getActions = type => {
+  return actions.map(action => action[type]);
+};
+const handleUserPending = (state) => {
+  state.isLoading = true;
+  state.error = null;
+}
+
+const handleUserRejected = (state, { payload }) => {
+  state.error = payload;
   state.isLoggedIn = false;
 };
 
@@ -23,14 +34,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   extraReducers: builder => {
-    
+     const { PENDING, FULFILLED, REJECTED } = STATUS;
     builder
-      .addCase(register.fulfilled, handleUserFulfilled)
-      .addCase(register.rejected, handleUserRejected)
-      .addCase(logIn.fulfilled, handleUserFulfilled)
-      .addCase(logOut.fulfilled, state => state = initialState         
-    )
-      .addCase(logOut.rejected, handleUserRejected);
+      .addCase(logOut.fulfilled, state => (state = initialState))
+      .addMatcher(isAnyOf(...getActions(PENDING)), handleUserPending)
+      .addMatcher(isAnyOf(...getActions(REJECTED)), handleUserRejected)
+      .addMatcher(isAnyOf(...getActions(FULFILLED)), handleUserFulfilled);
   },
 });
 

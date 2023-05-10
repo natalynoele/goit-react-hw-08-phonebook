@@ -10,15 +10,16 @@ import ContactForm from 'components/ContactForm';
 import { selectIsLoggedIn } from 'redux/auth/authSelectors';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { selectContacts } from 'redux/contacts/contactsSelectors';
 
 const Contacts = () => {
   const navigate = useNavigate();
   const isLoading = useSelector(selectIsLoading);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
-
+  const contacts = useSelector(selectContacts);
+  
   useEffect(() => {
-    
     if (isLoggedIn) {
       dispatch(fetchContacts());
     } else {
@@ -26,16 +27,22 @@ const Contacts = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
- 
+
   return (
     <>
-      <Container component="main" maxWidth="md" sx={{display: 'flex', flexDirection:'column', alignItems:'center'}}>
+      <Container
+        component="main"
+        maxWidth="md"
+        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
         <ContactForm />
         {isLoading && <Spinner />}
-        <ContactsContainer>
-          <Filter />
-          <ContactList />
-        </ContactsContainer>
+        {contacts.length > 0 && (
+          <ContactsContainer>
+            <Filter />
+            <ContactList />
+          </ContactsContainer>
+        )}
       </Container>
     </>
   );

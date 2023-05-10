@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { register } from 'redux/auth/authOperations';
+import { useDispatch, useSelector } from 'react-redux';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Avatar,
@@ -13,6 +12,10 @@ import {
   Typography,
   Container,
 } from '@mui/material';
+import Spinner from './spinner/Spinner';
+import { register } from 'redux/auth/authOperations';
+import { selectError } from 'redux/auth/authSelectors';
+import { selectIsLoading } from 'redux/auth/authSelectors';
 
 export default function SignUp() {
   const dispatch = useDispatch();
@@ -22,6 +25,8 @@ export default function SignUp() {
     password: '',
   });
 
+  const error = useSelector(selectError);
+  const loading = useSelector(selectIsLoading);
   const handleSubmit = event => {
     event.preventDefault();
     dispatch(register(user));
@@ -109,6 +114,12 @@ export default function SignUp() {
             Sign Up
           </Button>
           <Grid container justifyContent="center">
+            <Typography variant="body2" color="error">
+              {error}
+            </Typography>
+          </Grid>
+          <Grid container justifyContent="center">
+            {loading && <Spinner />}
             <Grid item>
               <Link href="/login" variant="body2">
                 Already have an account? Sign in

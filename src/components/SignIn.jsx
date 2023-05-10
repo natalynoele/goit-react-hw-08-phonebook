@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,10 +10,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Spinner from './spinner/Spinner';
 import { logIn } from 'redux/auth/authOperations';
 import { useState } from 'react';
 import { selectError } from 'redux/auth/authSelectors';
-import { useSelector } from 'react-redux';
+import { selectIsLoading } from 'redux/auth/authSelectors';
+
 
 export default function SignIn() {
   const dispatch = useDispatch();
@@ -20,8 +23,10 @@ export default function SignIn() {
     email: '',
     password: '',
   });
-  const error = useSelector(selectError)
-  // console.log(error)
+
+  const error = useSelector(selectError);
+  const loading = useSelector(selectIsLoading);
+  
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setUser(prevState => ({ ...prevState, [name]: value.trim() }));
@@ -92,10 +97,13 @@ export default function SignIn() {
             Log In
           </Button>
           <Grid container justifyContent="center">
-            <Typography>{ error }</Typography>
+            <Typography variant="body2" color="error">
+              {error}
+            </Typography>
           </Grid>
           <Grid container>
             <Grid container justifyContent="center">
+              {loading && <Spinner />}
               <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
